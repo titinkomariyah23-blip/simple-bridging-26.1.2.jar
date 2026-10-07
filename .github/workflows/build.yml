@@ -14,14 +14,9 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
-      - name: Extract zip and move contents
+      - name: Extract zip contents
         run: |
-          unzip simple-bridging-26.1.2.zip
-          DIR_NAME=$(find . -maxdepth 1 -type d ! -path . ! -path './.git' ! -path './.github')
-          if [ -n "$DIR_NAME" ]; then
-            mv $DIR_NAME/* .
-            mv $DIR_NAME/.* . 2>/dev/null || true
-          fi
+          unzip -o simple-bridging-26.1.2.zip
 
       - name: Make gradlew executable
         run: chmod +x gradlew
