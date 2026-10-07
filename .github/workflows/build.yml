@@ -20,19 +20,11 @@ jobs:
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
+        with:
+          gradle-version: '8.8'
 
       - name: Build project
-        run: |
-          if [ -f "gradlew" ]; then
-            chmod +x gradlew
-            ./gradlew build --stacktrace
-          elif [ -f "*/gradlew" ]; then
-            cd $(dirname $(find . -name "gradlew" | head -n 1))
-            chmod +x gradlew
-            ./gradlew build --stacktrace
-          else
-            gradle build --stacktrace
-          fi
+        run: gradle build
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
