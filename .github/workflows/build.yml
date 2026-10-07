@@ -14,18 +14,28 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
-      - name: Extract zip contents
+      - name: Extract zip
         run: |
           unzip -o simple-bridging-26.1.2.zip
 
-      - name: Make gradlew executable
-        run: chmod +x gradlew
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
 
-      - name: Build with Gradle
-        run: ./gradlew build
+      - name: Build project
+        run: |
+          if [ -f "gradlew" ]; then
+            chmod +x gradlew
+            ./gradlew build
+          elif [ -f "*/gradlew" ]; then
+            cd $(dirname $(find . -name "gradlew" | head -n 1))
+            chmod +x gradlew
+            ./gradlew build
+          else
+            gradle build
+          fi
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
           name: Mod-JAR
-          path: build/libs/*.jar
+          path: "**/build/libs/*.jar"
