@@ -14,17 +14,18 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
-      - name: Extract zip
+      - name: Extract zip and build
         run: |
           unzip -o simple-bridging-26.1.2.zip
-
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v3
-        with:
-          gradle-version: '8.10.2'
-
-      - name: Build project
-        run: gradle build
+          # Cari folder tempat gradlew berada lalu masuk dan build
+          GRADLEW_PATH=$(find . -name "gradlew" | head -n 1)
+          if [ -n "$GRADLEW_PATH" ]; then
+            cd $(dirname "$GRADLEW_PATH")
+            chmod +x gradlew
+            ./gradlew build
+          else
+            gradle build
+          fi
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
