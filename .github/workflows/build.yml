@@ -25,13 +25,13 @@ jobs:
         run: |
           if [ -f "gradlew" ]; then
             chmod +x gradlew
-            ./gradlew build
+            ./gradlew build --stacktrace
           elif [ -f "*/gradlew" ]; then
             cd $(dirname $(find . -name "gradlew" | head -n 1))
             chmod +x gradlew
-            ./gradlew build
+            ./gradlew build --stacktrace
           else
-            gradle build
+            gradle build --stacktrace
           fi
 
       - name: Upload Artifact
